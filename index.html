@@ -5,122 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة حسابات Toktok Go</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        #login-container {
-            text-align: center;
-            padding: 50px;
-            margin-top: 100px;
-        }
-
-        #login-container input {
-            padding: 10px;
-            margin: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        #login-container button {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        h1, h2 {
-            text-align: center;
-            color: #5a5a5a;
-        }
-
-        .form-section, .data-section {
-            margin-bottom: 30px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        button {
-            background-color: #007bff;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            width: 100%;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        #status {
-            text-align: center;
-            margin-top: 15px;
-            font-weight: bold;
-        }
-
-        .data-table-container {
-            overflow-x: auto;
-        }
-
-        #data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        #data-table th,
-        #data-table td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: center;
-        }
-
-        #data-table th {
-            background-color: #007bff;
-            color: white;
-        }
-
-        #loading {
-            text-align: center;
-            margin-top: 20px;
-            font-style: italic;
-            color: #666;
-        }
-
-        /* Hide the main content initially */
-        #content {
-            display: none;
-        }
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333; line-height: 1.6; padding: 20px; }
+        .container { max-width: 800px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        #login-container { text-align: center; padding: 50px; margin-top: 100px; }
+        #login-container input { padding: 10px; margin: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        #login-container button { background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        h1, h2 { text-align: center; color: #5a5a5a; }
+        .form-section, .data-section { margin-bottom: 30px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #007bff; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; width: 100%; }
+        button:hover { background-color: #0056b3; }
+        #status { text-align: center; margin-top: 15px; font-weight: bold; }
+        .data-table-container { overflow-x: auto; }
+        #data-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        #data-table th, #data-table td { border: 1px solid #ddd; padding: 12px; text-align: center; }
+        #data-table th { background-color: #007bff; color: white; }
+        #loading { text-align: center; margin-top: 20px; font-style: italic; color: #666; }
+        #content { display: none; }
     </style>
 </head>
 <body>
@@ -167,49 +69,40 @@
                         </tr>
                     </thead>
                     <tbody>
-                        </tbody>
+                    </tbody>
                 </table>
             </div>
         </div>
     </div>
 
     <script>
-        // Set your password here
-        const correctPassword = '1t#M5XrgIe"58>JXS4I2xd+Jyc4j)-+INS'p~m4*~)BRr$7i/ab3;HVNkQ"e7>]';
-
+        const correctPassword = '1t#M5XrgIe"58>JXS4I2xd+Jyc4j)-+INS\'p~m4*~)BRr$7i/ab3;HVNkQ"e7>]';
         function checkPassword() {
             const password = document.getElementById('passwordInput').value;
             const errorMessage = document.getElementById('error-message');
-            
             if (password === correctPassword) {
                 document.getElementById('login-container').style.display = 'none';
                 document.getElementById('content').style.display = 'block';
-                fetchAndRenderData(); // Load data after successful login
+                fetchAndRenderData();
             } else {
                 errorMessage.textContent = 'كلمة السر غير صحيحة. حاول مرة أخرى.';
             }
         }
-
         const webAppUrl = 'https://script.google.com/macros/s/AKfycbxsQaVOlN1f25AlTpZeCgRdWn3lTs2T-17V411h51G0bpaD1wjtUDO_iLxi-4rfg4pw/exec';
-
         async function fetchAndRenderData() {
             const loading = document.getElementById('loading');
             loading.style.display = 'block';
             try {
                 const response = await fetch(webAppUrl);
                 const data = await response.json();
-                
                 const tableBody = document.querySelector('#data-table tbody');
-                tableBody.innerHTML = ''; // Clear previous data
-                
+                tableBody.innerHTML = '';
                 if (data.length > 1) {
                     for (let i = 1; i < data.length; i++) {
                         const row = data[i];
                         const tr = document.createElement('tr');
-                        
                         const date = new Date(row['التاريخ']);
                         const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-                        
                         tr.innerHTML = `
                             <td>${formattedDate}</td>
                             <td>${row['الشركة']}</td>
@@ -225,13 +118,11 @@
                 loading.style.display = 'none';
             }
         }
-        
         document.getElementById('dataForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const form = e.target;
             const formData = new FormData(form);
             const statusDiv = document.getElementById('status');
-            
             try {
                 const response = await fetch(webAppUrl, {
                     method: 'POST',
@@ -249,9 +140,6 @@
                 statusDiv.textContent = 'حدث خطأ في الاتصال.';
             }
         });
-
-        // The initial data loading is now called after a successful login
-        // document.addEventListener('DOMContentLoaded', fetchAndRenderData);
     </script>
 </body>
 </html>
