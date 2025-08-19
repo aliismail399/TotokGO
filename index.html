@@ -7,6 +7,9 @@
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333; line-height: 1.6; padding: 20px; }
         .container { max-width: 800px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        #login-container { text-align: center; padding: 50px; margin-top: 100px; }
+        #login-container input { padding: 10px; margin: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        #login-container button { background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
         h1, h2 { text-align: center; color: #5a5a5a; }
         .form-section, .data-section { margin-bottom: 30px; }
         label { display: block; margin-bottom: 5px; font-weight: bold; }
@@ -19,11 +22,20 @@
         #data-table th, #data-table td { border: 1px solid #ddd; padding: 12px; text-align: center; }
         #data-table th { background-color: #007bff; color: white; }
         #loading { text-align: center; margin-top: 20px; font-style: italic; color: #666; }
+        #content { display: none; }
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <div id="login-container">
+        <h2>أدخل كلمة السر</h2>
+        <input type="password" id="passwordInput" placeholder="أدخل كلمة السر هنا">
+        <br>
+        <button onclick="checkPassword()">دخول</button>
+        <p id="error-message" style="color: red;"></p>
+    </div>
+
+    <div id="content" class="container">
         <h1>إدارة حسابات شركة Toktok Go</h1>
 
         <div class="form-section">
@@ -35,13 +47,11 @@
                 <label for="date">التاريخ:</label>
                 <input type="date" id="date" name="التاريخ" required>
 
-                <input type="hidden" name="الشركة" value="Toktok Go">
-
                 <label for="description">البيان:</label>
                 <input type="text" id="description" name="البيان" required>
 
                 <label for="amount">المبلغ (بالجنية المصري):</label>
-                <input type="number" id="amount" name="المبلغ" required>
+                <input type="number" id="amount" name="المبلغ (بالجنية المصري)" required>
 
                 <button type="submit">حفظ المعاملة</button>
             </form>
@@ -58,20 +68,35 @@
                     <thead>
                         <tr>
                             <th>التاريخ</th>
-                            <th>الشركة</th>
                             <th>البيان</th>
                             <th>المبلغ (بالجنية المصري)</th>
                         </tr>
                     </thead>
                     <tbody>
-                    </tbody>
+                        </tbody>
                 </table>
             </div>
         </div>
     </div>
 
     <script>
-        const webAppUrl = 'https://script.google.com/macros/s/AKfycbwnLyVVofaBU6JZaQRS7fzc7WMmZYweBSvHD3SLrACxRNAJYlAKElbsMW4MIRF90DE/exec';
+        // CLIENT-SIDE PASSWORD (for displaying data only - NOT SECURE)
+        const displayPassword = '1234';
+
+        function checkPassword() {
+            const password = document.getElementById('passwordInput').value;
+            const errorMessage = document.getElementById('error-message');
+            
+            if (password === displayPassword) {
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+                fetchAndRenderData(); // Load data after successful login
+            } else {
+                errorMessage.textContent = 'كلمة السر غير صحيحة. حاول مرة أخرى.';
+            }
+        }
+
+        const webAppUrl = 'https://script.google.com/macros/s/AKfycbwUkwtT2HyUTa1BZ1MHzrBTP4oNmvLjFA0vjpupBXmPXUkylp0sUDKm-HcPHnDCmw/exec';
 
         async function fetchAndRenderData() {
             const loading = document.getElementById('loading');
@@ -81,7 +106,7 @@
                 const data = await response.json();
                 
                 const tableBody = document.querySelector('#data-table tbody');
-                tableBody.innerHTML = '';
+                tableBody.innerHTML = ''; // Clear previous data
                 
                 if (data.length > 1) {
                     for (let i = 1; i < data.length; i++) {
@@ -93,9 +118,8 @@
                         
                         tr.innerHTML = `
                             <td>${formattedDate}</td>
-                            <td>${row['الشركة']}</td>
                             <td>${row['البيان']}</td>
-                            <td>${row['المبلغ']}</td>
+                            <td>${row['المبلغ (بالجنية المصري)']}</td>
                         `;
                         tableBody.appendChild(tr);
                     }
@@ -130,8 +154,6 @@
                 statusDiv.textContent = 'حدث خطأ في الاتصال.';
             }
         });
-
-        document.addEventListener('DOMContentLoaded', fetchAndRenderData);
     </script>
 </body>
 </html>
